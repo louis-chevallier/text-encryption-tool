@@ -1,7 +1,7 @@
 'use strict';
 
 // eslint-disable-next-line no-unused-vars
-class Safe {
+export class Safe {
   #key = '';
 
   #encoder = new TextEncoder();
@@ -14,11 +14,13 @@ class Safe {
   }
 
   async open(password) {
-    this.#key = await crypto.subtle.digest({
-      name: 'SHA-256'
-    }, this.#encoder.encode(password)).then(result => crypto.subtle.importKey('raw', result, {
-      name: 'AES-CBC'
-    }, true, ['encrypt', 'decrypt']));
+      this.#key = await crypto.subtle.digest({
+          name: 'SHA-256'
+      }, this.#encoder.encode(password)).then(result => crypto.subtle.importKey('raw', result, {
+          name: 'AES-CBC'
+      }, true, ['encrypt', 'decrypt']));
+      console.log(this.#key);
+      
   }
   export() {
     return crypto.subtle.exportKey('raw', this.#key).then(ab => {
